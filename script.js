@@ -59,28 +59,37 @@ const quotes = [
     showExistingQuotes.addEventListener('click', showRandomQuotes);
 
     // logic for user input
-    
-
     const newQuoteText= document.getElementById('newQuoteText');
 
     const newQuoteCategory = document.getElementById('newQuoteCategory');
 
     
 
-    const arrayOfUserQuotes=[];
+     let arrayOfUserQuotes = [];
 
      const ul = document.createElement('ul');
 
-     // Append ul to the page
-     document.body.appendChild(ul);
+     
+     document.body.appendChild(ul);// show ul content on the page in the browser 
+
+    
+
+     // Implementation of load functionality
+     const storedQuotes = localStorage.getItem('arrayOfUserQuotes');
+    
+     // check if quotes already exist on the page then it loads
+     if(storedQuotes){
+        arrayOfUserQuotes =JSON.parse(storedQuotes);
+        arrayOfUserQuotes.forEach( quote => {
+         const li = document.createElement('li');
+         li.textContent = `"${quote.text}" - ${quote.category}`;
+         ul.appendChild(li);
+        });
+     }
 
     function addQuote(){
-
-        const captureUserQuoteText =  newQuoteText.value.trim();
-    
-       const captureUserQuoteCategory = newQuoteCategory.value.trim();
-
-       
+     const captureUserQuoteText =  newQuoteText.value.trim();
+     const captureUserQuoteCategory = newQuoteCategory.value.trim();
 
         if(!captureUserQuoteText || !captureUserQuoteCategory){
             alert("Pls input a valid text");
@@ -90,11 +99,13 @@ const quotes = [
             arrayOfUserQuotes.push({
                 text: captureUserQuoteText,
                 category:captureUserQuoteCategory
-            })
+            });
+             // Save user input quotes to be stored in local Storage
+          const stringifiedUserQuotes = JSON.stringify(arrayOfUserQuotes);
+         localStorage.setItem('arrayOfUserQuotes', stringifiedUserQuotes);
         }
     
-     const listElement = document.createElement('li');
-
+      const listElement = document.createElement('li');
       ul.appendChild(listElement);
 
      const removeBtn =  document.createElement('button');
@@ -103,19 +114,20 @@ const quotes = [
 
      const latestQuote = arrayOfUserQuotes[arrayOfUserQuotes.length-1];
 
-     listElement.textContent = `"${latestQuote.text}" — ${latest.category}`;
+     listElement.textContent = `"${latestQuote.text}" — ${latestQuote.category}`;
 
      listElement.appendChild(removeBtn);
 
 
-         // Remove button functionality.
-        const index = arrayOfUserQuotes.length - 1;
-        removeBtn.addEventListener('click', () => {
-        arrayOfUserQuotes.splice(index, 1); // remove from memory 
-        ul.removeChild(listElement); //remove from page
+      // Remove button functionality.
+      const index = arrayOfUserQuotes.length - 1;
+      removeBtn.addEventListener('click', () => {
+      arrayOfUserQuotes.splice(index, 1); // remove from memory 
+      ul.removeChild(listElement); //remove from page
     });
-    }
 
-
+    newQuoteText.value = "";
+    newQuoteCategory.value = "";
+};
 
 });
