@@ -1,6 +1,6 @@
 const Footer = ()=>{
     return(
-   <footer>
+   <footer style={{color:'white', textAlign: 'center'}}>
      <p>© 2023 City Lovers</p>
    </footer>
     );
